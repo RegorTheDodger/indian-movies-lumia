@@ -95,7 +95,7 @@
 
   /* the same vetting the server does, because covers also arrive from
      localStorage and end up inside url('...') in a style attribute */
-  var COVER_OK = /^https?:\/\/[^\s"'()\\<>]+$/i;
+  var COVER_OK = /^(?:https?:)?\/\/[^\s"'()\\<>]+$/i;
   function safeCover(url) {
     url = String(url || "").replace(/^\s+|\s+$/g, "");
     return COVER_OK.test(url) ? url : "";

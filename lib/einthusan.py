@@ -19,9 +19,12 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 
 HOST = "einthusan.tv"
 CDN_HOST = "cdn2.einthusan.io"
-COVER_BASE = "https://%s/etv/s3/moviecovers/" % CDN_HOST
+# Protocol-relative on purpose: the Lumia build may be served over plain
+# HTTP, because Windows Phone 8.1 cannot validate the CDN's current
+# certificate chain. The CDN answers on both schemes.
+COVER_BASE = "//%s/etv/s3/moviecovers/" % CDN_HOST
 
-CDN = "https://%s/etv/content/D{}.mp4" % CDN_HOST
+CDN = "//%s/etv/content/D{}.mp4" % CDN_HOST
 
 LANGS = [
     ("tamil", "Tamil"),

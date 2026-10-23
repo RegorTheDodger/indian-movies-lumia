@@ -21,7 +21,7 @@ from . import einthusan as E
 # IE11 has no object-fit, so the poster is a background-image on a fixed-ratio
 # box instead. That puts the url inside a style attribute, where a quote or a
 # bracket would break out of the CSS string, so covers are vetted first.
-_COVER_OK = re.compile(r'^https?://[^\s"\'()\\<>]+$', re.I)
+_COVER_OK = re.compile(r'^(?:https?:)?//[^\s"\'()\\<>]+$', re.I)
 
 NAV = [
     ("/", "Home"),
