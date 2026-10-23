@@ -1,0 +1,467 @@
+/*
+ * Windows 98 stylesheet for Internet Explorer 11, which is what Windows Phone
+ * 8.1 ships. Every rule here is doubly constrained: it has to look like 1998
+ * AND it has to avoid everything IE11 cannot do.
+ *
+ * So no custom properties, no grid, no clamp(), no backdrop-filter, no
+ * position:sticky, no object-fit, no flex gap, no aspect-ratio, no :has(),
+ * no min()/max(), no border-radius, no ::selection, no :focus-within.
+ *
+ * Depth is done the way 1998 did it: 2px outset/inset borders, which is a
+ * border-style IE11 has always understood, plus the five greys of the period --
+ * face #c0c0c0, highlight #fff, light #dfdfdf, shadow #808080, dark #000 --
+ * on a teal #008080 desktop, with #000080 navy for title bars and selection.
+ */
+
+* { box-sizing: border-box; }
+
+html { -ms-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 4px;
+  background: #008080;
+  color: #000;
+  font: 12px/1.4 Tahoma, "MS Sans Serif", Verdana, Geneva, sans-serif;
+}
+
+/* IE11 does not give HTML5 elements block display on its own */
+main, section, article, header, nav, aside { display: block; }
+
+a { color: #000080; text-decoration: none; }
+img { display: block; border: 0; }
+button {
+  font: inherit;
+  color: #000;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  cursor: pointer;
+}
+input, select, button { font-family: inherit; font-size: 12px; }
+
+/* ---------------------------------------------------------------- window */
+
+.win {
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  padding: 3px;
+  /* reads as a maximised window rather than one that shrink-wraps its
+     content; vh is one of the few modern units IE11 does support */
+  min-height: 94vh;
+}
+
+.titlebar {
+  background: #000080;
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 2px 3px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tb-ico { display: inline-block; margin-right: 5px; vertical-align: middle; }
+.mark {
+  display: inline-block;
+  height: 16px;
+  line-height: 16px;
+  color: #fff;
+  font-weight: bold;
+  vertical-align: middle;
+}
+.mark b { color: #fff; font-weight: bold; }
+.tb-btns { float: right; }
+.tb-btn {
+  display: inline-block;
+  width: 16px;
+  height: 14px;
+  line-height: 12px;
+  text-align: center;
+  background: #c0c0c0;
+  color: #000;
+  border: 1px outset #c0c0c0;
+  font-size: 9px;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+.menu {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 2px 0;
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+.navlink {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: #000;
+}
+.navlink:hover { background: #000080; color: #fff; }
+.navlink.on { background: #000080; color: #fff; }
+
+.navsearch { padding: 1px 0 4px; white-space: nowrap; }
+.navsearch input {
+  width: 58%;
+  padding: 2px 3px;
+  color: #000;
+  background: #fff;
+  border: 2px inset #c0c0c0;
+}
+.navsearch .tb-go { margin-left: 3px; padding: 2px 12px; }
+.navsearch .tb-go:active { border-style: inset; }
+
+.content { background: #c0c0c0; }
+.page { padding: 6px 1px 8px; }
+
+/* ------------------------------------------------------------ typography */
+
+/* 1998 had one text size and used bold for hierarchy, so the scale is flat */
+.display {
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: bold;
+  letter-spacing: 0;
+  margin: 0;
+  color: #000;
+}
+
+.h1 {
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: bold;
+  margin: 0;
+  color: #000;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #000080;
+}
+
+.lede {
+  margin: 6px 0 0;
+  max-width: none;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #000;
+}
+.lede.bad { color: #a80000; }
+.lede.good { color: #006400; }
+
+/* ------------------------------------------------------------ form bits */
+
+.search { margin-top: 8px; }
+
+.field {
+  display: inline-block;
+  width: 64%;
+  padding: 0 3px;
+  background: #fff;
+  border: 2px inset #c0c0c0;
+  vertical-align: middle;
+}
+.field input {
+  width: 56%;
+  padding: 3px 0;
+  font-size: 12px;
+  color: #000;
+  background: transparent;
+  border: 0;
+}
+.field input:focus { outline: none; }
+.field select {
+  width: 41%;
+  padding: 3px 0 3px 4px;
+  font-size: 12px;
+  color: #000;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid #808080;
+}
+.field select:focus { outline: none; }
+
+.btn {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 3px 12px;
+  font-size: 12px;
+  color: #000;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  vertical-align: middle;
+}
+.btn:active { border-style: inset; }
+.btn.ghost { color: #000; background: #c0c0c0; border: 2px outset #c0c0c0; }
+
+/* ------------------------------------------------------------------ rows */
+
+.hero { padding: 8px 1px 10px; }
+
+.row { margin: 0 0 12px; }
+
+.rowhead {
+  margin: 0 0 5px;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: bold;
+  color: #000080;
+}
+.rownote { margin: 0 0 6px; font-size: 11px; color: #000; }
+
+.railwrap { position: relative; }
+
+/*
+ * white-space:nowrap plus inline-block children is the one horizontal-scroll
+ * idiom that behaves on Windows Phone; overflow-x:auto gives native touch
+ * scrolling, so no drag code is needed. -ms-overflow-style:scrollbar asks
+ * IE11 for the classic chunky scrollbar rather than its modern thin one.
+ */
+.rail {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 2px 2px 6px;
+  font-size: 0;
+  -ms-overflow-style: scrollbar;
+  -ms-touch-action: pan-x pan-y;
+  touch-action: pan-x pan-y;
+}
+.rail > * {
+  display: inline-block;
+  white-space: normal;
+  font-size: 12px;
+  vertical-align: top;
+}
+.rail.static { white-space: normal; overflow: visible; }
+
+.arrow {
+  position: absolute;
+  top: 2px;
+  height: 132px;
+  width: 18px;
+  line-height: 132px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  z-index: 5;
+}
+.arrow.left { left: 2px; }
+.arrow.right { right: 2px; }
+.arrow:active { border-style: inset; }
+/* a hidden arrow must not swallow taps aimed at the poster underneath */
+.arrow[hidden] { display: none; }
+
+.empty { margin: 0; padding: 8px 1px; font-size: 11px; color: #404040; }
+
+/* ------------------------------------------------------------------ card */
+
+.card { width: 112px; margin-right: 8px; vertical-align: top; }
+.rail > .card:last-child { margin-right: 0; }
+
+/*
+ * object-fit does not exist in IE11, so the cover is a background-image on a
+ * fixed 2:3 box instead of an <img> that would simply squash. The bevel is the
+ * frame a 1998 photo viewer would have had.
+ */
+.poster {
+  display: block;
+  width: 112px;
+  height: 168px;
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border: 2px inset #c0c0c0;
+}
+.poster .art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.nocover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 168px;
+  text-align: center;
+  font-size: 10px;
+  color: #808080;
+}
+
+/* a real progress bar: white sunken trough, navy blocks inside */
+.pbar { margin-top: 4px; }
+.pbar-track {
+  display: block;
+  height: 12px;
+  background: #fff;
+  border: 1px inset #c0c0c0;
+  overflow: hidden;
+}
+.pbar-track i { display: block; height: 10px; background: #000080; }
+.pbar b {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: normal;
+  color: #000;
+}
+
+.cmeta { margin: 3px 0 0; font-size: 10px; color: #000; }
+
+.ctitle {
+  margin: 2px 0 0;
+  font-size: 11px;
+  line-height: 1.25;
+  font-weight: normal;
+  /* no -webkit-line-clamp here, so clamp with height instead */
+  max-height: 28px;
+  overflow: hidden;
+}
+.ctitle a { color: #000080; }
+.ctitle a:hover { text-decoration: underline; }
+
+/* stays pressed when the film is saved, the way a 1998 toolbar toggle would */
+.wl {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  color: #000;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+}
+.wl:active { border-style: inset; }
+.wl .on { display: none; }
+.wl.on { background: #000080; color: #fff; border-style: inset; }
+.wl.on .lbl { display: none; }
+.wl.on .on { display: inline; }
+
+/* ---------------------------------------------------------------- player */
+
+.watchhead { padding: 6px 1px 8px; }
+.back { font-size: 12px; color: #000080; text-decoration: underline; }
+.watchhead h1 { margin: 6px 0 4px; }
+
+.watchbar { margin: 8px 0 0; }
+.watchbar .wl { margin: 0 6px 0 0; }
+
+.player { padding: 2px; background: #000; border: 2px inset #c0c0c0; }
+.player video {
+  width: 100%;
+  max-height: 220px;
+  display: block;
+  background: #000;
+}
+
+.resume { min-height: 14px; margin: 6px 0 0; font-size: 11px; color: #006400; }
+
+.directlab { margin: 8px 0 3px; font-size: 11px; font-weight: bold; }
+.directlink {
+  margin: 0;
+  padding: 3px 4px;
+  background: #fff;
+  border: 2px inset #c0c0c0;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.directlink code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 10px;
+  color: #000;
+}
+
+/* ---------------------------------------------------------- group panels */
+
+/* the 1998 group box: a hairline frame with a legend inside the top edge */
+.panel {
+  margin: 0 0 10px;
+  padding: 7px 6px 6px;
+  background: #c0c0c0;
+  border: 1px solid #808080;
+}
+.panel h2 {
+  display: table;
+  margin: 0 0 6px 8px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #000;
+  background: #c0c0c0;
+}
+
+.settings { padding-top: 8px; }
+
+/* no :has() in IE11, so legacy.js mirrors the checked radio onto the label */
+.setlang { margin: 8px 0 10px; }
+.radio {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+  padding: 2px 6px;
+  font-size: 12px;
+  color: #000;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.radio.on { background: #000080; color: #fff; border-style: inset; }
+.radio input { margin: 0 3px 0 0; vertical-align: middle; }
+.radio span { vertical-align: middle; }
+
+/* ------------------------------------------------------------------ misc */
+
+.chips { margin-top: 8px; font-size: 0; }
+.chip {
+  display: inline-block;
+  margin: 0 4px 4px 0;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: #000080;
+  background: #c0c0c0;
+  border: 2px outset #c0c0c0;
+}
+.chip:active { border-style: inset; }
+
+.status {
+  margin-top: 3px;
+  padding: 2px 3px;
+  border: 2px inset #c0c0c0;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.status .st-r { float: right; }
+
+/* ------------------------------------------------------------ responsive */
+
+/* the phone this exists for reports 480px, and 1998 had no clamp() */
+@media (max-width: 680px) {
+  body { padding: 2px; }
+
+  .display { font-size: 15px; }
+  .h1 { font-size: 14px; }
+
+  .field { width: 62%; }
+  .btn { padding: 3px 10px; }
+
+  .card { width: 104px; }
+  .poster, .nocover { width: 104px; height: 156px; }
+  .nocover { line-height: 156px; }
+  /* arrows are a mouse affordance; on the phone the rail is swiped */
+  .arrow { display: none; }
+
+  .player video { max-height: 190px; }
+}
