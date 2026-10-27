@@ -121,6 +121,11 @@ and every page here is built on the server. Host it on anything that runs Python
 
 `render.yaml` describes a Render web service: free plan, one gunicorn worker with
 eight threads, `/healthz` as the check. Push, then point Render at the repo.
+Set the Render `DATABASE_URL` environment variable to the same Neon connection
+string used by the modern Vercel deployment. This is required for a Lumia login
+to work with the same account and sync state as the modern site. Without it,
+the app intentionally falls back to a local SQLite database, which is separate
+from Vercel and is not suitable for cross-deployment accounts.
 
 ```
 gunicorn app:app --workers 1 --threads 8 --timeout 120
