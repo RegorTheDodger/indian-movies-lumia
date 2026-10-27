@@ -4,7 +4,7 @@ HTML rendering for the Windows Phone 8.1 build.
 Markup is constrained by IE11 rather than by taste:
 
   * posters are background-image boxes, because IE11 has no object-fit
-  * the direct mp4 link is always visible, because IE11 cannot open <details>
+  * player actions use ordinary anchors, which IE11 handles reliably
   * inputs are type=text, because IE11 renders type=search inconsistently
 
 Class names match static/legacy.css. static/legacy.js owns the local copy of
@@ -331,22 +331,19 @@ def watch_page(item, top_lang):
             '<button class="wl" type="button" data-action="toggle">'
             '<span class="lbl">My List</span><span class="on">In My List</span>'
             "</button>"
-            '<a class="btn ghost" href="%s" download>Download</a>'
+            '<a class="btn ghost" href="%s" target="_blank" rel="noopener noreferrer">'
+            'Open in new tab</a>'
             "</p></div>"
             '<div class="player"><video id="player" controls preload="metadata"'
             ' playsinline poster="%s"><source src="%s" type="video/mp4">'
-            "Your browser cannot play this file. The direct link is below."
+            "Your browser cannot play this file."
             "</video></div>"
             '<p class="resume" data-role="resume"></p>'
-            # IE11 has no <details>/<summary>, so the link is simply always
-            # visible rather than hiding behind a disclosure that cannot open.
-            '<p class="directlab">Direct link</p>'
-            '<p class="directlink"><code>%s</code></p>'
             "</article>"
             % (esc(item["id"]), esc(item["title"]), esc(item.get("cover") or ""),
                esc(item["url"]), esc(item.get("year", "")), esc(item["title"]),
                meta, esc(item["url"]), esc(item.get("cover") or ""),
-               esc(item["url"]), esc(item["url"])),
+               esc(item["url"])),
             top_lang)
 
 
