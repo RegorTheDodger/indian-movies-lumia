@@ -178,8 +178,6 @@ def home_page(top_lang):
                search_bar(lang=top_lang),
                row("Continue watching", "continue",
                    "Nothing part-watched yet. Start something and it lands here."),
-               row("Recently played", "recent",
-                   "Films you have started will be listed here."),
                row("My list", "watchlist",
                    "Nothing saved yet. Tap My List on any poster.")),
             top_lang)

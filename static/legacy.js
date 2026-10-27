@@ -23,6 +23,7 @@
   var LS_PROGRESS = "iml:progress";
   var LS_WATCHED = "iml:watched";
   var LS_CATALOG = "iml:catalog";
+  var LS_REMOVED = "iml:removed";
 
   var DONE_AT = 0.95;      /* past this fraction a film counts as finished */
   var MIN_SECONDS = 8;     /* below this it is not worth remembering */
@@ -133,6 +134,7 @@
   function getProgress() { return read(LS_PROGRESS, {}) || {}; }
   function getWatched() { return read(LS_WATCHED, {}) || {}; }
   function getCatalog() { return read(LS_CATALOG, {}) || {}; }
+  function getRemoved() { return read(LS_REMOVED, {}) || {}; }
 
   function setList(list) {
     write(LS_LIST, list);
@@ -155,6 +157,7 @@
 
   function toggleList(item) {
     var list = getList();
+    var removed = getRemoved();
     var at = -1;
     var i;
     for (i = 0; i < list.length; i++) {
@@ -162,15 +165,19 @@
     }
     if (at >= 0) {
       list.splice(at, 1);
+      removed[item.id] = new Date().getTime();
     } else {
+      delete removed[item.id];
       list.unshift({
         id: item.id,
         title: item.title,
         cover: item.cover || "",
         url: item.url,
-        year: item.year || ""
+        year: item.year || "",
+        at: new Date().getTime()
       });
     }
+    write(LS_REMOVED, removed);
     setList(list);
   }
 
@@ -216,19 +223,6 @@
     var p = getProgress();
     delete p[id];
     write(LS_PROGRESS, p);
-  }
-
-  function recentlyPlayed() {
-    var watched = getWatched();
-    var out = [];
-    for (var id in watched) {
-      if (!Object.prototype.hasOwnProperty.call(watched, id)) continue;
-      if ((watched[id].seconds || 0) > 0) {
-        out.push(extend({}, watched[id], { id: id }));
-      }
-    }
-    out.sort(function (a, b) { return (b.at || 0) - (a.at || 0); });
-    return out.slice(0, 24);
   }
 
   function continueWatching() {
@@ -355,8 +349,6 @@
     fill("watchlist", saved, savedIds);
     fill("watchlist-full", saved, savedIds);
     fill("continue", continueWatching(), savedIds);
-    fill("recent", recentlyPlayed(), savedIds);
-
     /* reflect the state on every button, including the player page */
     each(document.querySelectorAll(".wl"), function (btn) {
       var host = upTo(btn, "data-id");
@@ -429,6 +421,7 @@
     video.addEventListener("ended", function () {
       markFinished(id, meta);
       paint();
+      syncAccount();
     });
 
     /* last chance to record where they got to */
@@ -477,6 +470,15 @@
           });
         }
       } else if (action === "clear-watchlist") {
+        var removed = getRemoved();
+        var saved = getList();
+        var si;
+        for (si = 0; si < saved.length; si++) {
+          if (saved[si] && saved[si].id) {
+            removed[saved[si].id] = new Date().getTime();
+          }
+        }
+        write(LS_REMOVED, removed);
         setList([]);
       } else if (action === "clear-all") {
         try {
@@ -484,9 +486,11 @@
           localStorage.removeItem(LS_PROGRESS);
           localStorage.removeItem(LS_WATCHED);
           localStorage.removeItem(LS_CATALOG);
+          localStorage.removeItem(LS_REMOVED);
         } catch (e) { /* nothing to do */ }
         paint();
       }
+      syncAccount();
       return;
     }
 
@@ -536,7 +540,7 @@
         progress: getProgress(),
         watched: getWatched(),
         catalog: getCatalog(),
-        removed: {}
+        removed: getRemoved()
       };
       var send = new XMLHttpRequest();
       send.open("POST", "/api/sync", true);
@@ -550,6 +554,7 @@
         write(LS_PROGRESS, result.state.progress || {});
         write(LS_WATCHED, result.state.watched || {});
         write(LS_CATALOG, result.state.catalog || {});
+        write(LS_REMOVED, result.state.removed || {});
         paint();
       };
       send.send(JSON.stringify(state));

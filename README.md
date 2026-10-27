@@ -60,7 +60,7 @@ to the analytics page, which is not here.
 
 ## What it does
 
-Search, a player, My List, Continue watching, Recently played, and Settings.
+Search, a player, My List, Continue watching, and Settings.
 The einthusan catalogue comes from the server; everything personal lives in
 `localStorage` in the phone's browser.
 
