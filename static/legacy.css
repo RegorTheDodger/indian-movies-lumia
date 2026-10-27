@@ -1,478 +1,341 @@
 /*
- * Windows 98 stylesheet for Internet Explorer 11, which is what Windows Phone
- * 8.1 ships. Every rule here is doubly constrained: it has to look like 1998
- * AND it has to avoid everything IE11 cannot do.
- *
- * So no custom properties, no grid, no clamp(), no backdrop-filter, no
- * position:sticky, no object-fit, no flex gap, no aspect-ratio, no :has(),
- * no min()/max(), no border-radius, no ::selection, no :focus-within.
- *
- * Depth is done the way 1998 did it: 2px outset/inset borders, which is a
- * border-style IE11 has always understood, plus the five greys of the period --
- * face #c0c0c0, highlight #fff, light #dfdfdf, shadow #808080, dark #000 --
- * on a teal #008080 desktop, with #000080 navy for title bars and selection.
+ * Windows Phone 8.1 visual system, IE11-safe.
+ * No flex gap, grid, custom properties, gradients, object-fit, or modern
+ * selectors: the Lumia browser gets touch-sized controls and native rails.
  */
-
 * { box-sizing: border-box; }
-
-html { -ms-text-size-adjust: 100%; }
-
+html { -ms-text-size-adjust: 100%; background: #1a1a1a; }
 body {
   margin: 0;
-  padding: 4px;
-  background: #008080;
-  color: #000;
-  font: 12px/1.4 Tahoma, "MS Sans Serif", Verdana, Geneva, sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  font: 15px/1.45 "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
-
-/* IE11 does not give HTML5 elements block display on its own */
-main, section, article, header, nav, aside { display: block; }
-
-a { color: #000080; text-decoration: none; }
-img { display: block; border: 0; }
-button {
+main, section, article, header, nav, footer { display: block; }
+a { color: #fff; text-decoration: none; }
+button, input, select {
   font: inherit;
-  color: #000;
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
-  cursor: pointer;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
 }
-input, select, button { font-family: inherit; font-size: 12px; }
-
-/* ---------------------------------------------------------------- window */
-
-.win {
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
-  padding: 3px;
-  /* reads as a maximised window rather than one that shrink-wraps its
-     content; vh is one of the few modern units IE11 does support */
-  min-height: 94vh;
+button { cursor: pointer; }
+button:focus, input:focus, select:focus, a:focus {
+  outline: 2px solid #1ba1e2;
+  outline-offset: 2px;
 }
 
-.titlebar {
-  background: #000080;
-  color: #fff;
-  font-weight: bold;
-  font-size: 12px;
-  line-height: 16px;
-  padding: 2px 3px;
-  white-space: nowrap;
-  overflow: hidden;
+.phone-shell {
+  width: 100%;
+  max-width: 720px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #1a1a1a;
 }
-.tb-ico { display: inline-block; margin-right: 5px; vertical-align: middle; }
-.mark {
+.phone-head {
+  position: relative;
+  min-height: 70px;
+  padding: 18px 20px 10px;
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+.brand { display: inline-block; vertical-align: middle; }
+.brand-mark {
   display: inline-block;
-  height: 16px;
-  line-height: 16px;
-  color: #fff;
-  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  margin-right: 9px;
+  color: #1ba1e2;
+  font-size: 19px;
+  line-height: 32px;
+  text-align: center;
+  border: 2px solid #1ba1e2;
   vertical-align: middle;
 }
-.mark b { color: #fff; font-weight: bold; }
-.tb-btns { float: right; }
-.tb-btn {
-  display: inline-block;
-  width: 16px;
-  height: 14px;
-  line-height: 12px;
-  text-align: center;
-  background: #c0c0c0;
-  color: #000;
-  border: 1px outset #c0c0c0;
-  font-size: 9px;
-  font-weight: bold;
-  margin-left: 2px;
+.brand-name {
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: -.03em;
+  vertical-align: middle;
 }
-
+.head-status {
+  float: right;
+  margin-top: 9px;
+  color: #999;
+  font-size: 12px;
+  text-transform: uppercase;
+}
 .menu {
-  background: #c0c0c0;
-  border-bottom: 1px solid #808080;
-  padding: 2px 0;
-  margin-bottom: 3px;
+  padding: 0 20px;
+  background: #1a1a1a;
+  border-bottom: 2px solid #1ba1e2;
   white-space: nowrap;
+  overflow-x: auto;
+  -ms-overflow-style: scrollbar;
+  -ms-touch-action: pan-x;
+  touch-action: pan-x;
 }
 .navlink {
   display: inline-block;
-  padding: 2px 8px;
-  font-size: 12px;
-  color: #000;
-}
-.navlink:hover { background: #000080; color: #fff; }
-.navlink.on { background: #000080; color: #fff; }
-
-.navsearch { padding: 1px 0 4px; white-space: nowrap; }
-.navsearch input {
-  width: 58%;
-  padding: 2px 3px;
-  color: #000;
-  background: #fff;
-  border: 2px inset #c0c0c0;
-}
-.navsearch .tb-go { margin-left: 3px; padding: 2px 12px; }
-.navsearch .tb-go:active { border-style: inset; }
-
-.content { background: #c0c0c0; }
-.page { padding: 6px 1px 8px; }
-
-/* ------------------------------------------------------------ typography */
-
-/* 1998 had one text size and used bold for hierarchy, so the scale is flat */
-.display {
-  font-size: 16px;
-  line-height: 1.25;
-  font-weight: bold;
-  letter-spacing: 0;
-  margin: 0;
-  color: #000;
-}
-
-.h1 {
-  font-size: 15px;
-  line-height: 1.25;
-  font-weight: bold;
-  margin: 0;
-  color: #000;
-}
-
-.eyebrow {
-  margin: 0 0 4px;
-  font-size: 11px;
-  line-height: 1.2;
-  font-weight: bold;
+  margin-right: 26px;
+  padding: 12px 0 10px;
+  color: #aaa;
+  font-size: 14px;
   text-transform: uppercase;
-  color: #000080;
+  vertical-align: bottom;
 }
+.navlink:hover, .navlink.on { color: #fff; }
+.navlink.on { border-bottom: 3px solid #1ba1e2; }
+.page { padding: 22px 20px 34px; }
+.phone-foot {
+  padding: 12px 20px 18px;
+  color: #777;
+  border-top: 1px solid #333;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.st-r { float: right; }
 
-.lede {
-  margin: 6px 0 0;
-  max-width: none;
+.display {
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  line-height: 1.08;
+  font-weight: 300;
+  letter-spacing: -.035em;
+}
+.h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 23px;
+  line-height: 1.15;
+  font-weight: 300;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: #1ba1e2;
   font-size: 12px;
-  line-height: 1.4;
-  color: #000;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
-.lede.bad { color: #a80000; }
-.lede.good { color: #006400; }
+.lede { margin: 10px 0 0; color: #aaa; }
+.lede.bad, .auth-status { color: #f06; }
+.lede.good, .auth-status.good { color: #8cbf26; }
 
-/* ------------------------------------------------------------ form bits */
-
-.search { margin-top: 8px; }
-
+.hero { padding: 0 0 28px; }
+.search { margin-top: 22px; white-space: nowrap; }
 .field {
   display: inline-block;
-  width: 64%;
-  padding: 0 3px;
-  background: #fff;
-  border: 2px inset #c0c0c0;
+  width: 72%;
+  padding: 0 10px;
+  background: #292929;
+  border-bottom: 2px solid #777;
   vertical-align: middle;
 }
+.field:focus-within { border-bottom-color: #1ba1e2; }
 .field input {
   width: 56%;
-  padding: 3px 0;
-  font-size: 12px;
-  color: #000;
+  height: 44px;
+  padding: 0;
+  color: #fff;
   background: transparent;
   border: 0;
+  outline: 0;
 }
-.field input:focus { outline: none; }
 .field select {
   width: 41%;
-  padding: 3px 0 3px 4px;
-  font-size: 12px;
-  color: #000;
-  background: transparent;
+  height: 44px;
+  padding: 0 0 0 8px;
+  color: #ccc;
+  background: #292929;
   border: 0;
-  border-left: 1px solid #808080;
+  border-left: 1px solid #555;
 }
-.field select:focus { outline: none; }
-
 .btn {
   display: inline-block;
-  margin-left: 4px;
-  padding: 3px 12px;
-  font-size: 12px;
-  color: #000;
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
+  min-height: 44px;
+  margin-left: 8px;
+  padding: 0 18px;
+  color: #fff;
+  background: #1ba1e2;
+  border: 0;
   vertical-align: middle;
 }
-.btn:active { border-style: inset; }
-.btn.ghost { color: #000; background: #c0c0c0; border: 2px outset #c0c0c0; }
+.btn:hover { background: #168ac0; }
+.btn:active { background: #10658e; }
+.btn.ghost { background: #333; border: 1px solid #666; }
+.btn.ghost:hover { background: #444; }
 
-/* ------------------------------------------------------------------ rows */
-
-.hero { padding: 8px 1px 10px; }
-
-.row { margin: 0 0 12px; }
-
+.row { margin: 0 0 28px; }
 .rowhead {
-  margin: 0 0 5px;
-  font-size: 13px;
-  line-height: 1.2;
-  font-weight: bold;
-  color: #000080;
+  margin: 0 0 10px;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 300;
 }
-.rownote { margin: 0 0 6px; font-size: 11px; color: #000; }
-
+.rownote { margin: 0 0 8px; color: #888; font-size: 12px; }
 .railwrap { position: relative; }
-
-/*
- * white-space:nowrap plus inline-block children is the one horizontal-scroll
- * idiom that behaves on Windows Phone; overflow-x:auto gives native touch
- * scrolling, so no drag code is needed. -ms-overflow-style:scrollbar asks
- * IE11 for the classic chunky scrollbar rather than its modern thin one.
- */
 .rail {
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap;
-  padding: 2px 2px 6px;
+  padding: 2px 0 12px;
   font-size: 0;
+  white-space: nowrap;
   -ms-overflow-style: scrollbar;
   -ms-touch-action: pan-x pan-y;
   touch-action: pan-x pan-y;
 }
 .rail > * {
   display: inline-block;
+  margin-right: 12px;
   white-space: normal;
-  font-size: 12px;
+  font-size: 15px;
   vertical-align: top;
 }
 .rail.static { white-space: normal; overflow: visible; }
-
 .arrow {
   position: absolute;
-  top: 2px;
-  height: 132px;
-  width: 18px;
-  line-height: 132px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: bold;
-  color: #000;
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
+  top: 50px;
   z-index: 5;
+  width: 34px;
+  height: 44px;
+  color: #fff;
+  background: #333;
+  border: 0;
+  font-size: 23px;
 }
-.arrow.left { left: 2px; }
-.arrow.right { right: 2px; }
-.arrow:active { border-style: inset; }
-/* a hidden arrow must not swallow taps aimed at the poster underneath */
+.arrow.left { left: 0; }
+.arrow.right { right: 0; }
 .arrow[hidden] { display: none; }
+.empty { margin: 0; padding: 8px 0; color: #888; font-size: 13px; }
 
-.empty { margin: 0; padding: 8px 1px; font-size: 11px; color: #404040; }
-
-/* ------------------------------------------------------------------ card */
-
-.card { width: 112px; margin-right: 8px; vertical-align: top; }
-.rail > .card:last-child { margin-right: 0; }
-
-/*
- * object-fit does not exist in IE11, so the cover is a background-image on a
- * fixed 2:3 box instead of an <img> that would simply squash. The bevel is the
- * frame a 1998 photo viewer would have had.
- */
+.card { width: 120px; }
 .poster {
   display: block;
-  width: 112px;
-  height: 168px;
-  background-color: #000;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  border: 2px inset #c0c0c0;
+  width: 120px;
+  height: 180px;
+  background: #292929;
+  border: 1px solid #555;
 }
 .poster .art {
   display: block;
   width: 100%;
   height: 100%;
+  background-position: center;
   background-repeat: no-repeat;
-  background-position: center center;
   background-size: cover;
 }
-
 .nocover {
   display: block;
-  width: 100%;
-  height: 100%;
-  line-height: 168px;
+  height: 178px;
+  padding-top: 78px;
+  color: #888;
   text-align: center;
-  font-size: 10px;
-  color: #808080;
-}
-
-/* a real progress bar: white sunken trough, navy blocks inside */
-.pbar { margin-top: 4px; }
-.pbar-track {
-  display: block;
-  height: 12px;
-  background: #fff;
-  border: 1px inset #c0c0c0;
-  overflow: hidden;
-}
-.pbar-track i { display: block; height: 10px; background: #000080; }
-.pbar b {
-  display: block;
-  margin-top: 2px;
-  font-size: 10px;
-  line-height: 1.3;
-  font-weight: normal;
-  color: #000;
-}
-
-.cmeta { margin: 3px 0 0; font-size: 10px; color: #000; }
-
-.ctitle {
-  margin: 2px 0 0;
   font-size: 11px;
-  line-height: 1.25;
-  font-weight: normal;
-  /* no -webkit-line-clamp here, so clamp with height instead */
-  max-height: 28px;
+}
+.ctitle {
+  height: 38px;
+  margin: 7px 0 0;
   overflow: hidden;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.3;
+  font-weight: 400;
 }
-.ctitle a { color: #000080; }
-.ctitle a:hover { text-decoration: underline; }
-
-/* stays pressed when the film is saved, the way a 1998 toolbar toggle would */
+.ctitle a:hover { color: #1ba1e2; }
+.cmeta { margin: 3px 0 0; color: #888; font-size: 11px; }
 .wl {
-  display: inline-block;
-  margin-top: 4px;
-  padding: 2px 6px;
-  font-size: 10px;
-  color: #000;
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
+  min-height: 32px;
+  margin-top: 6px;
+  padding: 0 8px;
+  color: #fff;
+  background: transparent;
+  border: 1px solid #666;
+  font-size: 11px;
 }
-.wl:active { border-style: inset; }
 .wl .on { display: none; }
-.wl.on { background: #000080; color: #fff; border-style: inset; }
+.wl.on { color: #1ba1e2; border-color: #1ba1e2; }
 .wl.on .lbl { display: none; }
 .wl.on .on { display: inline; }
 
-/* ---------------------------------------------------------------- player */
-
-.watchhead { padding: 6px 1px 8px; }
-.back { font-size: 12px; color: #000080; text-decoration: underline; }
-.watchhead h1 { margin: 6px 0 4px; }
-
-.watchbar { margin: 8px 0 0; }
-.watchbar .wl { margin: 0 6px 0 0; }
-
-.player { padding: 2px; background: #000; border: 2px inset #c0c0c0; }
+.watchhead { padding-bottom: 14px; }
+.back { color: #1ba1e2; font-size: 13px; }
+.watchhead h1 { margin: 12px 0 5px; }
+.watchbar { margin: 12px 0 0; }
+.watchbar .wl { margin: 0 8px 0 0; }
+.player { padding: 2px; background: #000; }
 .player video {
-  width: 100%;
-  max-height: 220px;
   display: block;
+  width: 100%;
+  max-height: 360px;
   background: #000;
 }
-
-.resume { min-height: 14px; margin: 6px 0 0; font-size: 11px; color: #006400; }
-
-.directlab { margin: 8px 0 3px; font-size: 11px; font-weight: bold; }
+.resume { min-height: 18px; margin: 8px 0 0; color: #8cbf26; font-size: 12px; }
+.directlab { margin: 16px 0 4px; color: #aaa; font-size: 12px; text-transform: uppercase; }
 .directlink {
   margin: 0;
-  padding: 3px 4px;
-  background: #fff;
-  border: 2px inset #c0c0c0;
-  word-wrap: break-word;
+  padding: 8px;
+  overflow-wrap: break-word;
   word-break: break-all;
-}
-.directlink code {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 10px;
-  color: #000;
-}
-
-/* ---------------------------------------------------------- group panels */
-
-/* the 1998 group box: a hairline frame with a legend inside the top edge */
-.panel {
-  margin: 0 0 10px;
-  padding: 7px 6px 6px;
-  background: #c0c0c0;
-  border: 1px solid #808080;
-}
-.panel h2 {
-  display: table;
-  margin: 0 0 6px 8px;
-  padding: 0 4px;
+  color: #1ba1e2;
+  background: #292929;
   font-size: 11px;
-  font-weight: bold;
-  color: #000;
-  background: #c0c0c0;
 }
-
-.settings { padding-top: 8px; }
-
-/* no :has() in IE11, so legacy.js mirrors the checked radio onto the label */
-.setlang { margin: 8px 0 10px; }
-.auth-form { margin: 8px 0 10px; }
-.auth-form input {
-  width: 180px;
-  margin: 0 4px 4px 0;
-  padding: 3px;
-  background: #fff;
-  border: 2px inset #c0c0c0;
+.panel {
+  margin: 0 0 14px;
+  padding: 18px;
+  background: #242424;
+  border-left: 3px solid #1ba1e2;
 }
-.auth-status { min-height: 14px; margin: 5px 0; color: #a80000; }
-.auth-status.good { color: #006400; }
-.auth-welcome { margin: 8px 0; font-weight: bold; }
+.panel h2 { margin: 0 0 8px; color: #fff; font-size: 18px; font-weight: 400; }
+.settings { padding-bottom: 18px; }
+.setlang { margin: 12px 0 0; }
 .radio {
   display: inline-block;
-  margin: 0 5px 5px 0;
-  padding: 2px 6px;
-  font-size: 12px;
-  color: #000;
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
+  margin: 0 8px 8px 0;
+  padding: 8px 10px;
+  color: #bbb;
+  background: #333;
+  border-bottom: 2px solid #555;
   cursor: pointer;
-  vertical-align: middle;
 }
-.radio.on { background: #000080; color: #fff; border-style: inset; }
-.radio input { margin: 0 3px 0 0; vertical-align: middle; }
-.radio span { vertical-align: middle; }
-
-/* ------------------------------------------------------------------ misc */
-
-.chips { margin-top: 8px; font-size: 0; }
+.radio.on { color: #fff; border-bottom-color: #1ba1e2; }
+.radio input { margin-right: 5px; }
+.auth-form { margin: 10px 0 0; white-space: nowrap; }
+.auth-form input {
+  width: 39%;
+  height: 44px;
+  margin-right: 8px;
+  padding: 0 12px;
+  color: #fff;
+  background: #292929;
+  border: 0;
+  border-bottom: 2px solid #666;
+}
+.auth-form input:focus { border-bottom-color: #1ba1e2; }
+.auth-status { min-height: 20px; margin: 8px 0 0; }
+.auth-welcome { margin: 12px 0; color: #aaa; }
+.auth-welcome b { color: #fff; font-weight: 400; }
+.chips { margin-top: 18px; }
 .chip {
   display: inline-block;
-  margin: 0 4px 4px 0;
-  padding: 2px 8px;
-  font-size: 12px;
-  color: #000080;
-  background: #c0c0c0;
-  border: 2px outset #c0c0c0;
+  margin: 0 8px 8px 0;
+  padding: 8px 12px;
+  color: #1ba1e2;
+  background: #292929;
+  border-bottom: 2px solid #1ba1e2;
 }
-.chip:active { border-style: inset; }
 
-.status {
-  margin-top: 3px;
-  padding: 2px 3px;
-  border: 2px inset #c0c0c0;
-  font-size: 11px;
-  white-space: nowrap;
-}
-.status .st-r { float: right; }
-
-/* ------------------------------------------------------------ responsive */
-
-/* the phone this exists for reports 480px, and 1998 had no clamp() */
-@media (max-width: 680px) {
-  body { padding: 2px; }
-
-  .display { font-size: 15px; }
-  .h1 { font-size: 14px; }
-
-  .field { width: 62%; }
-  .btn { padding: 3px 10px; }
-
-  .card { width: 104px; }
-  .poster, .nocover { width: 104px; height: 156px; }
-  .nocover { line-height: 156px; }
-  /* arrows are a mouse affordance; on the phone the rail is swiped */
-  .arrow { display: none; }
-
-  .player video { max-height: 190px; }
+@media (max-width: 520px) {
+  .phone-head { padding-left: 14px; padding-right: 14px; }
+  .page { padding: 18px 14px 28px; }
+  .menu { padding-left: 14px; padding-right: 14px; }
+  .phone-foot { padding-left: 14px; padding-right: 14px; }
+  .brand-name { font-size: 21px; }
+  .head-status { display: none; }
+  .field { width: 100%; }
+  .search .btn { margin-top: 8px; margin-left: 0; }
+  .auth-form { white-space: normal; }
+  .auth-form input { width: 100%; margin: 0 0 8px; }
+  .auth-form .btn { margin: 0; }
 }

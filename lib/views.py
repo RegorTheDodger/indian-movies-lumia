@@ -56,29 +56,23 @@ def page(title, body, top_lang="tamil"):
         # document mode, which would break the CSS outright.
         '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        '<meta name="color-scheme" content="light">'
+        '<meta name="color-scheme" content="dark">'
         "<title>%s</title>"
         '<link rel="stylesheet" href="/static/legacy.css">'
         "</head><body>"
-        '<div class="desktop"><div class="win">'
-        # the whole page is a Windows 98 window: title bar, menu, toolbar,
-        # content, status bar, with 2px bevels doing all the depth
-        '<div class="titlebar" id="bar">'
-        '<span class="tb-ico">&#128250;</span>'
-        '<a class="mark" href="/"><b>Indian</b> Movies</a>'
-        '<span class="tb-btns">'
-        '<span class="tb-btn">&#95;</span>'
-        '<span class="tb-btn">&#9633;</span>'
-        '<span class="tb-btn">&#10005;</span>'
-        "</span></div>"
+        '<div class="phone-shell"><header class="phone-head" id="bar">'
+        '<a class="brand" href="/"><span class="brand-mark">&#9654;</span>'
+        '<span class="brand-name">Indian Movies</span></a>'
+        '<span class="head-status">%s</span></header>'
         '<nav class="menu">%s</nav>'
-        '<div class="content"><main class="page" data-lang="%s">%s</main></div>'
-        '<div class="status"><span class="st">Ready</span>'
-        '<span class="st-r">%s</span></div>'
-        "</div></div>"
+        '<main class="page" data-lang="%s">%s</main>'
+        '<footer class="phone-foot"><span>Indian Movies</span>'
+        '<span class="st-r">%s</span></footer>'
+        "</div>"
         '<script src="/static/legacy.js"></script>'
         "</body></html>"
-        % (esc(title), nav, esc(top_lang), body,
+        % (esc(title), esc(E.LANG_NAMES.get(top_lang, top_lang)), nav,
+           esc(top_lang), body,
            esc(E.LANG_NAMES.get(top_lang, top_lang)))
     )
 

@@ -1,7 +1,7 @@
 # Indian Movies — Windows Phone 8.1 build
 
-The new site, rebuilt to run on the Lumia, wearing a Windows 98 interface. A
-copy of `einthusan-web/`, with the browser-facing half replaced so that Internet
+The new site, rebuilt to run on the Lumia, wearing a Windows Phone 8.1
+interface. A copy of `einthusan-web/`, with the browser-facing half replaced so that Internet
 Explorer 11 can actually render and run it. The original is untouched and still
 deploys to Vercel. This copy runs on the LAN and can also be hosted anywhere that
 speaks WSGI, which is how the phone reaches it away from home.
@@ -15,25 +15,10 @@ speaks WSGI, which is how the phone reaches it away from home.
 
 ## The look
 
-Every page is a Windows 98 window on a teal desktop: navy title bar with
-minimise/maximise/close, a menu bar, a toolbar with a search field, a group-box
-content area and a status bar.
-
-The palette is the real 1998 one — teal `#008080` desktop, `#c0c0c0` face,
-`#fff` highlight, `#808080` shadow, `#000080` navy for title bars and selection.
-All depth comes from 2px `outset`/`inset` borders, which is how 1998 did it and
-also a `border-style` IE11 has always understood. There is no `border-radius`
-anywhere, no gradients, and the type is Tahoma at 11–12px.
-
-Details worth keeping: the progress bars are white sunken troughs with navy
-blocks in them, a saved film's button stays pressed (`inset` + navy), the
-language radios are toggle buttons with the live one inverted, and
-`-ms-overflow-style: scrollbar` asks IE11 for the chunky classic scrollbar
-rather than its modern thin one.
-
-The theme is free — it is all borders and background colours, so it added no new
-compatibility risk. `check.js` now also asserts the greys, the bevels, the
-window chrome, and the absence of rounded corners.
+Every page uses a Windows Phone 8.1-inspired dark Metro surface with a compact
+brand header, a cyan active pivot link, large Segoe UI Light headings, flat
+accent buttons, touch-sized fields, and horizontally scrolling movie rails.
+The layout uses inline blocks and native overflow for the small Lumia screen.
 
 ## Why it needed rewriting
 
