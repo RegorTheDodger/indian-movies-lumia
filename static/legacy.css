@@ -27,7 +27,7 @@ button:focus, input:focus, select:focus, a:focus {
 
 .phone-shell {
   width: 100%;
-  max-width: 720px;
+  max-width: none;
   min-height: 100vh;
   margin: 0 auto;
   background: #1a1a1a;
