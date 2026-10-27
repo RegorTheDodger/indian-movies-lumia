@@ -407,6 +407,17 @@ input, select, button { font-family: inherit; font-size: 12px; }
 
 /* no :has() in IE11, so legacy.js mirrors the checked radio onto the label */
 .setlang { margin: 8px 0 10px; }
+.auth-form { margin: 8px 0 10px; }
+.auth-form input {
+  width: 180px;
+  margin: 0 4px 4px 0;
+  padding: 3px;
+  background: #fff;
+  border: 2px inset #c0c0c0;
+}
+.auth-status { min-height: 14px; margin: 5px 0; color: #a80000; }
+.auth-status.good { color: #006400; }
+.auth-welcome { margin: 8px 0; font-weight: bold; }
 .radio {
   display: inline-block;
   margin: 0 5px 5px 0;

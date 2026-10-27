@@ -520,8 +520,118 @@
     sync();
   }
 
+  /* IE11-compatible account sync. Passwords are handled only by the server;
+   * this client sends the existing local state after the session is present. */
+  function syncAccount() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/auth/me", true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4 || xhr.status !== 200) return;
+      var account;
+      try { account = JSON.parse(xhr.responseText); } catch (e) { return; }
+      if (!account.authenticated) return;
+
+      var state = {
+        watchlist: getList(),
+        progress: getProgress(),
+        watched: getWatched(),
+        catalog: getCatalog(),
+        removed: {}
+      };
+      var send = new XMLHttpRequest();
+      send.open("POST", "/api/sync", true);
+      send.setRequestHeader("Content-Type", "application/json");
+      send.onreadystatechange = function () {
+        if (send.readyState !== 4 || send.status !== 200) return;
+        var result;
+        try { result = JSON.parse(send.responseText); } catch (e2) { return; }
+        if (!result.state) return;
+        write(LS_LIST, result.state.watchlist || []);
+        write(LS_PROGRESS, result.state.progress || {});
+        write(LS_WATCHED, result.state.watched || {});
+        write(LS_CATALOG, result.state.catalog || {});
+        paint();
+      };
+      send.send(JSON.stringify(state));
+    };
+    xhr.send();
+  }
+
+  function updateAuthUi(account, message) {
+    var guest = document.querySelector("[data-auth-guest]");
+    var signedIn = document.querySelector("[data-auth-user]");
+    var name = document.querySelector("[data-auth-name]");
+    var status = document.querySelector("[data-auth-status]");
+    var loggedIn = !!(account && account.authenticated);
+    if (guest) {
+      guest.style.display = loggedIn ? "none" : "";
+      if (loggedIn) guest.setAttribute("hidden", "hidden");
+      else guest.removeAttribute("hidden");
+    }
+    if (signedIn) {
+      signedIn.style.display = loggedIn ? "" : "none";
+      if (loggedIn) signedIn.removeAttribute("hidden");
+      else signedIn.setAttribute("hidden", "hidden");
+    }
+    if (name) name.innerHTML = loggedIn ? escHtml(account.user.display) : "";
+    if (status) {
+      status.innerHTML = escHtml(message || "");
+      setCls(status, "good", !!message && loggedIn);
+    }
+  }
+
+  function wireAuth() {
+    var check = new XMLHttpRequest();
+    check.open("GET", "/auth/me", true);
+    check.onreadystatechange = function () {
+      if (check.readyState !== 4 || check.status !== 200) return;
+      try { updateAuthUi(JSON.parse(check.responseText)); } catch (e) {}
+    };
+    check.send();
+
+    document.addEventListener("submit", function (event) {
+      var form = upTo(event.target, "data-auth-form");
+      if (!form) return;
+      event.preventDefault();
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", attr(form, "action"), true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
+        var result;
+        try { result = JSON.parse(xhr.responseText); } catch (e) { return; }
+        if (xhr.status < 200 || xhr.status >= 300) {
+          updateAuthUi({ authenticated: false }, result.error || "Could not sign in.");
+          return;
+        }
+        form.reset();
+        updateAuthUi(result, "Signed in. Your library is syncing.");
+        syncAccount();
+      };
+      xhr.send(JSON.stringify({
+        username: form.querySelector('[name="username"]').value,
+        password: form.querySelector('[name="password"]').value
+      }));
+    });
+
+    document.addEventListener("click", function (event) {
+      var button = upTo(event.target, "data-auth-logout");
+      if (!button) return;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/auth/logout", true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
+        updateAuthUi({ authenticated: false }, "You are signed out.");
+        paint();
+      };
+      xhr.send();
+    });
+  }
+
   function init() {
     paint();
+    wireAuth();
+    syncAccount();
     wirePlayer();
     wireRails();
     wireSettings();

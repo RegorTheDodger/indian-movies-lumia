@@ -7,9 +7,9 @@ Markup is constrained by IE11 rather than by taste:
   * the direct mp4 link is always visible, because IE11 cannot open <details>
   * inputs are type=text, because IE11 renders type=search inconsistently
 
-Class names match static/legacy.css. static/legacy.js owns everything personal
-(list, resume position, watch time), which is also why the server keeps no
-accounts and no database.
+Class names match static/legacy.css. static/legacy.js owns the local copy of
+personal data (list, resume position, watch time); signed-in users also sync
+that data with the shared account database.
 """
 
 import html
@@ -27,6 +27,7 @@ NAV = [
     ("/", "Home"),
     ("/search", "Search"),
     ("/watchlist", "My List"),
+    ("/settings", "Settings"),
 ]
 
 
@@ -71,11 +72,6 @@ def page(title, body, top_lang="tamil"):
         '<span class="tb-btn">&#10005;</span>'
         "</span></div>"
         '<nav class="menu">%s</nav>'
-        '<form class="navsearch" action="/search" method="get">'
-        '<input type="text" name="q" placeholder="Search films..."'
-        ' autocomplete="off" aria-label="Search films">'
-        '<button class="tb-go" type="submit">Go</button>'
-        "</form>"
         '<div class="content"><main class="page" data-lang="%s">%s</main></div>'
         '<div class="status"><span class="st">Ready</span>'
         '<span class="st-r">%s</span></div>'
@@ -265,9 +261,34 @@ def settings_page(top_lang):
             "library.</p>"
             '<form class="setlang" action="/settings" method="post">%s'
             '<button class="btn" type="submit">Save</button></form></section>'
+            '<section class="panel auth-panel" data-auth-panel><h2>Sync between devices</h2>'
+            '<p class="lede" style="margin-top:0">Create an account or log in '
+            "to sync your list and watch progress between Lumia and modern.</p>"
+            '<p class="auth-status" data-auth-status role="status"></p>'
+            '<div data-auth-guest>'
+            '<form class="auth-form" data-auth-form="login" action="/auth/login" method="post">'
+            '<input type="text" name="username" placeholder="Username" '
+            'autocomplete="username" required>'
+            '<input type="password" name="password" placeholder="Password" '
+            'autocomplete="current-password" required>'
+            '<button class="btn" type="submit">Log in</button></form>'
+            '<form class="auth-form" data-auth-form="register" action="/auth/register" method="post">'
+            '<input type="text" name="username" placeholder="New username" '
+            'autocomplete="username" required>'
+            '<input type="password" name="password" placeholder="New password (8+ characters)" '
+            'autocomplete="new-password" required>'
+            '<button class="btn ghost" type="submit">Create account</button></form>'
+            '</div><div data-auth-user hidden>'
+            '<p class="auth-welcome">Signed in as <b data-auth-name></b></p>'
+            '<button class="btn ghost" type="button" data-auth-logout>Log out</button>'
+            '</div>'
+            '<form action="/auth/logout" method="post" hidden>'
+            '<button class="btn ghost" type="submit">Log out</button></form>'
+            '<p class="lede" style="margin-top:0">The browser syncs its local '
+            "data after authentication.</p></section>"
             '<section class="panel"><h2>Stored data</h2>'
-            '<p class="lede" style="margin-top:0">Your list, watch time and '
-            "resume points live in this browser. No account, no server copy.</p>"
+            '<p class="lede" style="margin-top:0">Erase this browser\'s local list, '
+            "watch time and resume positions.</p>"
             '<button class="btn ghost" type="button" data-action="clear-all">'
             "Erase everything</button></section>" % rows,
             top_lang)
