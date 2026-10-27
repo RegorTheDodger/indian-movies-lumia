@@ -123,6 +123,58 @@ button:focus, input:focus, select:focus, a:focus {
 .lede.bad, .auth-status { color: #f06; }
 .lede.good, .auth-status.good { color: #8cbf26; }
 
+.banner-host { margin: -22px -20px 24px; }
+.banner {
+  position: relative;
+  min-height: 330px;
+  overflow: hidden;
+  background-color: #242424;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.banner-empty { min-height: 210px; }
+.banner-copy {
+  position: relative;
+  z-index: 2;
+  width: 58%;
+  padding: 74px 30px 42px;
+}
+.banner-title {
+  margin: 0;
+  color: #fff;
+  font-size: 38px;
+  line-height: 1.08;
+  font-weight: 300;
+  letter-spacing: -.04em;
+}
+.banner-meta {
+  display: inline-block;
+  margin: 16px 0 0;
+  padding: 4px 11px;
+  color: #ddd;
+  background: #333;
+  font-size: 12px;
+}
+.banner .btn { margin-top: 20px; }
+.banner .btn.ghost { margin-left: 6px; }
+.banner-poster {
+  position: absolute;
+  top: 32px;
+  right: 7%;
+  width: 180px;
+  height: 270px;
+  background: #292929;
+  border: 1px solid #555;
+}
+.banner-poster .art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .hero { padding: 0 0 28px; }
 .search { margin-top: 22px; white-space: nowrap; }
 .field {
@@ -258,6 +310,17 @@ button:focus, input:focus, select:focus, a:focus {
 .wl.on { color: #1ba1e2; border-color: #1ba1e2; }
 .wl.on .lbl { display: none; }
 .wl.on .on { display: inline; }
+.pbar {
+  height: 5px;
+  margin-top: 7px;
+  background: #555;
+}
+.pbar-track { display: block; height: 100%; }
+.pbar-track i {
+  display: block;
+  height: 100%;
+  background: #1ba1e2;
+}
 
 .watchhead { padding-bottom: 14px; }
 .back { color: #1ba1e2; font-size: 13px; }
@@ -334,6 +397,11 @@ button:focus, input:focus, select:focus, a:focus {
   .phone-foot { padding-left: 14px; padding-right: 14px; }
   .brand-name { font-size: 21px; }
   .head-status { display: none; }
+  .banner-host { margin: -18px -14px 20px; }
+  .banner { min-height: 270px; }
+  .banner-copy { width: 100%; padding: 42px 18px 24px; }
+  .banner-title { font-size: 30px; max-width: 62%; }
+  .banner-poster { top: 24px; right: 14px; width: 112px; height: 168px; }
   .field { width: 100%; }
   .search .btn { margin-top: 8px; margin-left: 0; }
   .auth-form { white-space: normal; }

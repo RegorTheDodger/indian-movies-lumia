@@ -185,6 +185,15 @@ def static_row(title, inner, empty_shelf="", empty_text=""):
             % (esc(title), inner, note))
 
 
+def banner_fallback():
+    return (
+        '<section class="banner banner-empty">'
+        '<div class="banner-copy"><p class="eyebrow">Indian Movies</p>'
+        '<h1 class="banner-title">Your next film<br>is one search away.</h1>'
+        '<p class="lede">Save a film to My List and it will appear here.</p>'
+        '</div></section>')
+
+
 # --------------------------------------------------------------------------
 # pages
 # --------------------------------------------------------------------------
@@ -192,14 +201,13 @@ def static_row(title, inner, empty_shelf="", empty_text=""):
 
 def home_page(top_lang):
     return ("Home",
+            '<div class="banner-host" data-banner>%s</div>'
             '<section class="hero">'
-            '<p class="eyebrow">%s</p>'
-            '<h1 class="display">Every film,<br>one search away.</h1>'
             "%s"
             '<p class="lede">Direct mp4 files straight from the catalogue. '
             "Nothing to install, no account, nothing in the way.</p>"
             "</section>%s%s"
-            % (esc(E.LANG_NAMES.get(top_lang, top_lang)),
+            % (banner_fallback(),
                search_bar(lang=top_lang),
                row("Continue watching", "continue",
                    "Nothing part-watched yet. Start something and it lands here."),

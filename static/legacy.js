@@ -43,8 +43,11 @@
         seen = true;
         if (!on) continue;
       }
+
       out.push(p);
     }
+
+    renderBanner();
     if (on && !seen) out.push(name);
     el.className = out.join(" ");
   }
@@ -263,6 +266,31 @@
       "&l=" + encodeURIComponent(m.lang || "");
   }
 
+  function bannerHtml(m) {
+    var cover = safeCover(m.cover);
+    var style = cover
+      ? ' style="background-image:linear-gradient(to right,rgba(10,10,10,.98) 0%,rgba(10,10,10,.72) 48%,rgba(10,10,10,.18) 100%),url(\'' +
+        cover + '\')"'
+      : "";
+    var href = watchHref(m);
+    return '<section class="banner"' + style + '>' +
+      '<div class="banner-copy"><p class="eyebrow">From your list</p>' +
+      '<h1 class="banner-title">' + escHtml(m.title) + '</h1>' +
+      (m.year ? '<p class="banner-meta">' + escHtml(m.year) + '</p>' : '') +
+      '<p><a class="btn" href="' + href + '">Play</a>' +
+      '<a class="btn ghost" href="' + href + '">More info</a></p></div>' +
+      (cover ? '<span class="banner-poster"><span class="art" style="background-image:url(\'' +
+        cover + '\')"></span></span>' : '') +
+      '</section>';
+  }
+
+  function renderBanner() {
+    var host = document.querySelector("[data-banner]");
+    var list = getList();
+    if (!host || !list.length) return;
+    host.innerHTML = bannerHtml(list[0]);
+  }
+
   function cardHtml(m) {
     var cover = safeCover(m.cover);
     var poster = cover
@@ -272,8 +300,9 @@
     var bar = "";
     if (typeof m.frac === "number" && m.frac > 0) {
       var pct = Math.round(m.frac * 100);
-      bar = '<div class="pbar"><span class="pbar-track"><i style="width:' +
-        pct + '%"></i></span><b>' + pct + "% watched</b></div>";
+      bar = '<div class="pbar" aria-label="' + pct +
+        '% watched"><span class="pbar-track"><i style="width:' +
+        pct + '%"></i></span></div>';
     }
 
     var meta = [];
@@ -341,6 +370,8 @@
         year: attr(el, "data-year")
       });
     });
+
+    renderBanner();
 
     var saved = [];
     for (i = 0; i < list.length; i++) {
