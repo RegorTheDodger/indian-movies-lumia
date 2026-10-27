@@ -157,10 +157,13 @@ button:focus, input:focus, select:focus, a:focus {
   font-size: 12px;
 }
 .banner .btn {
+  text-align: center;
   min-height: 44px;
+  min-width: 82px;
   margin-top: 20px;
   padding: 10px 20px;
   line-height: 22px;
+  vertical-align: middle;
 }
 .banner .btn.ghost { margin-left: 8px; }
 .banner-poster {
