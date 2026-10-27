@@ -156,8 +156,13 @@ button:focus, input:focus, select:focus, a:focus {
   background: #333;
   font-size: 12px;
 }
-.banner .btn { margin-top: 20px; }
-.banner .btn.ghost { margin-left: 6px; }
+.banner .btn {
+  min-height: 44px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  line-height: 22px;
+}
+.banner .btn.ghost { margin-left: 8px; }
 .banner-poster {
   position: absolute;
   top: 32px;
