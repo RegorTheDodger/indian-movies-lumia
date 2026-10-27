@@ -84,6 +84,7 @@ button:focus, input:focus, select:focus, a:focus {
   text-transform: uppercase;
   vertical-align: bottom;
 }
+.navlink svg { margin-right: 6px; vertical-align: -4px; }
 .navlink:hover, .navlink.on { color: #fff; }
 .navlink.on { border-bottom: 3px solid #1ba1e2; }
 .page { padding: 22px 20px 34px; }

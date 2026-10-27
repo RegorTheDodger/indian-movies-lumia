@@ -24,15 +24,38 @@ from . import einthusan as E
 _COVER_OK = re.compile(r'^(?:https?:)?//[^\s"\'()\\<>]+$', re.I)
 
 NAV = [
-    ("/", "Home"),
-    ("/search", "Search"),
-    ("/watchlist", "My List"),
-    ("/settings", "Settings"),
+    ("/", "Home", "home"),
+    ("/search", "Search", "search"),
+    ("/watchlist", "My List", "list"),
+    ("/settings", "Settings", "settings"),
 ]
 
 
 def esc(text):
     return html.escape(text or "", quote=True)
+
+
+ICON_HOME = ('<svg viewBox="0 0 24 24" width="17" height="17" fill="none"'
+             ' stroke="currentColor" stroke-width="2" stroke-linejoin="round"'
+             ' aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'
+             '<path d="M9 21v-6h6v6"/></svg>')
+ICON_SEARCH = ('<svg viewBox="0 0 24 24" width="17" height="17" fill="none"'
+               ' stroke="currentColor" stroke-width="2" stroke-linecap="round"'
+               ' aria-hidden="true"><circle cx="11" cy="11" r="7"/>'
+               '<path d="m20 20-3.5-3.5"/></svg>')
+ICON_LIST = ('<svg viewBox="0 0 24 24" width="17" height="17" fill="none"'
+             ' stroke="currentColor" stroke-width="2" stroke-linecap="round"'
+             ' aria-hidden="true"><path d="M5 5h14M5 12h14M5 19h14"/></svg>')
+ICON_SETTINGS = ('<svg viewBox="0 0 24 24" width="17" height="17" fill="none"'
+                 ' stroke="currentColor" stroke-width="2" stroke-linecap="round"'
+                 ' stroke-linejoin="round" aria-hidden="true"><path d="M9.6 3.2h4.8l.7 2.1a7.3 7.3 0 0 1 1.7 1l2.1-.6 2.4 4.1-1.5 1.6a7.4 7.4 0 0 1 0 2l1.5 1.6-2.4 4.1-2.1-.6a7.3 7.3 0 0 1-1.7 1l-.7 2.1H9.6l-.7-2.1a7.3 7.3 0 0 1-1.7-1l-2.1.6-2.4-4.1 1.5-1.6a7.4 7.4 0 0 1 0-2L2.7 9.8l2.4-4.1 2.1.6a7.3 7.3 0 0 1 1.7-1z"/><circle cx="12" cy="12.4" r="2.7"/></svg>')
+
+NAV_ICONS = {
+    "home": ICON_HOME,
+    "search": ICON_SEARCH,
+    "list": ICON_LIST,
+    "settings": ICON_SETTINGS,
+}
 
 
 def safe_cover(url):
@@ -45,10 +68,11 @@ def safe_cover(url):
 def page(title, body, top_lang="tamil"):
     current = title.lower()
     nav = "".join(
-        '<a class="navlink%s" href="%s">%s</a>'
+        '<a class="navlink%s" href="%s">%s<span>%s</span></a>'
         % (" on" if (href == "/" and current == "home")
-           or href.lstrip("/").lower() == current else "", href, esc(label))
-        for href, label in NAV)
+           or href.lstrip("/").lower() == current else "",
+           href, NAV_ICONS[key], esc(label))
+        for href, label, key in NAV)
 
     return (
         '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
@@ -57,6 +81,7 @@ def page(title, body, top_lang="tamil"):
         '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<meta name="color-scheme" content="dark">'
+        '<link rel="icon" href="/static/icon.svg" type="image/svg+xml">'
         "<title>%s</title>"
         '<link rel="stylesheet" href="/static/legacy.css">'
         "</head><body>"
@@ -173,7 +198,7 @@ def home_page(top_lang):
             "%s"
             '<p class="lede">Direct mp4 files straight from the catalogue. '
             "Nothing to install, no account, nothing in the way.</p>"
-            "</section>%s%s%s"
+            "</section>%s%s"
             % (esc(E.LANG_NAMES.get(top_lang, top_lang)),
                search_bar(lang=top_lang),
                row("Continue watching", "continue",
